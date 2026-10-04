@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGear - High Performance PC Hardware</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Background glowing orbs -->
+    <div class="bg-orb orb-red"></div>
+    <div class="bg-orb orb-gray"></div>
+    
+    <!-- Abstract Tech Graphic (CSS Rings) -->
+    <div class="abstract-graphic">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="dots-layer"></div>
+    </div>
+
+    <div class="main-wrapper">
+        <!-- Navigation -->
+        <script src="navbar.js"></script>
+
+        <!-- Hero Section -->
+        <header class="hero-new">
+            <div class="hero-left">
+                <h1 data-i18n="hero_title_new">TechGear: Your one-stop computer shop for affordable custom builds</h1>
+                <p data-i18n="hero_desc_new">A trusted partner for IT enthusiasts, offering custom-built PCs, pre-built systems, computer components, laptops, and tablets. We provide affordable custom PC assembly based on your specifications and deliver excellent after-sales service.
+</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary-pill" data-i18n="hero_btn_shop">Shop Now <i class="fas fa-arrow-right"></i></a>
+                    <a href="https://youtu.be/-q_S27LbNKU" target="_blank" class="btn-secondary-pill"><i class="fas fa-play"></i> <span data-i18n="hero_btn_demo">Watch Demo</span></a>
+                </div>
+            </div>
+            <div class="hero-bottom-right">
+                <span data-i18n="top_brands">Top Brands:</span>
+                <div class="brand-icons">
+                    <div class="brand-circle"><img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Intel_logo_2023.svg" alt="Intel" style="width: 22px; filter: brightness(0) invert(1); opacity: 0.9;"></div>
+                    <div class="brand-circle"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/AMD_Logo.svg" alt="AMD" style="width: 24px; filter: brightness(0) invert(1); opacity: 0.9;"></div>
+                    <div class="brand-circle"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/NVIDIA_logo.svg" alt="Nvidia" style="width: 26px; filter: brightness(0) invert(1); opacity: 0.9;"></div>
+                    <div class="brand-circle"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg" alt="Asus" style="width: 26px; filter: brightness(0) invert(1); opacity: 0.9;"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Image Slider Section -->
+        <section class="slider-section">
+            <div class="slider-container">
+                <div class="slides">
+                    <div class="slide active">
+                        <img src="https://media.discordapp.net/attachments/1264643259569799210/1554862319069167687/444b99c4-bc9d-4a40-9176-30022ae72572.png?ex=6abe6de0&is=6abd1c60&hm=166cdf1ccc960afb99fefa8c5b5688a58e5bc60fec2ffdab771ed55621096c5f&=&format=webp&quality=lossless&width=1536&height=864" alt="Hardware">
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80" alt="Gaming Setup">
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?auto=format&fit=crop&w=1200&q=80" alt="RGB Keyboard">
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=1200&q=80" alt="Tech">
+                    </div>
+                </div>
+                <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                <div class="slider-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section (Scroll down to see) -->
+        <section class="products" id="products-section" style="margin-top: 50px;">
+            <h2 data-i18n="sec_featured" style="text-align: center; margin-bottom: 40px; font-size: 2.2rem;">Featured Gear</h2>
+            <div class="product-grid" id="productGrid"></div></section>
+    </div>
+
+    <!-- Entry Popup -->
+    <div class="exit-popup-overlay" id="entryPopupOverlay">
+        <div class="entry-popup-content">
+            <button class="close-popup" id="closeEntryPopup"><i class="fas fa-times"></i></button>
+            <a href="prebuilds.html">
+                <img src="popup-ad.png" alt="Special Offer" style="width: 100%; height: auto; border-radius: 15px; cursor: pointer;">
+            </a>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    
+    
+
+    <script src="lang.js"></script>
+    <script src="auth.js"></script>
+    <script src="products.js"></script>
+<script src="shop.js"></script>
+
+    <script src="footer.js"></script>
+
+</body>
+</html>
+
+

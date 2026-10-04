@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGear - Admin Dashboard</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 30px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .admin-table th, .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .admin-table th { background: rgba(0,0,0,0.3); }
+        .action-btn {
+            background: none; border: none; cursor: pointer; color: #a4b0be; font-size: 1.1rem; margin-right: 10px; transition: 0.3s;
+        }
+        .action-btn:hover { color: #fff; }
+        .action-btn.edit:hover { color: #2ecc71; }
+        .action-btn.delete:hover { color: #e74c3c; }
+        
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #18191c; border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px; border-radius: 15px; width: 500px; max-width: 90%;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #a4b0be; font-size: 0.9rem; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif;
+        }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-orb orb-red"></div>
+    <div class="bg-orb orb-gray"></div>
+
+    <script src="navbar.js"></script>
+
+    <!-- Admin Login -->
+    <div class="container" id="adminLoginContainer" style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+        <div class="form-container glass-card" style="width: 400px; padding: 40px; text-align: center;">
+            <i class="fas fa-lock" style="font-size: 3rem; color: #c02020; margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 10px; color: #fff;">Admin Authentication</h2>
+            <p style="color: #a4b0be; margin-bottom: 30px; font-size: 0.9rem;">Enter passcode to access dashboard</p>
+            <form id="adminLoginForm">
+                <input type="password" id="adminPass" placeholder="Admin Passcode" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; text-align: center; font-size: 1.1rem; outline: none;">
+                <button type="submit" class="btn-primary-pill" style="width: 100%; justify-content: center;">Enter Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Initially Hidden) -->
+    <div class="admin-container glass-card" id="adminDashboard" style="display: none;">
+        <div class="admin-header">
+            <h2>Product Management</h2>
+            <button class="btn-primary-pill" id="addBtn"><i class="fas fa-plus"></i> Add Product</button>
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Title (EN)</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="adminProductList">
+                <!-- Injected via JS -->
+            </tbody>
+        </table>
+    </div>
+
+    
+    <!-- Orders Management -->
+    <div class="admin-header" style="margin-top:40px;">
+        <h2>Order Management</h2>
+    </div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="adminOrderList">
+            <!-- Injected via JS -->
+        </tbody>
+    </table>
+
+<!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="margin-bottom: 20px;">Add Product</h3>
+            <form id="productForm">
+                <input type="hidden" id="pId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="pCat" required>
+                            <option value="components">Components</option>
+                              <option value="laptops">Laptops</option>
+                            <option value="prebuilds">Pre-builds</option>
+                            <option value="deals">Deals</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price ($)</label>
+                        <input type="number" step="0.01" id="pPrice" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Product Image (URL or Upload)</label>
+                    <input type="text" id="pImage" placeholder="https://example.com/image.png or fas fa-box" style="margin-bottom: 10px;">
+                    <input type="file" id="pImageFile" accept="image/*" style="font-size: 0.9rem; color: #a4b0be;">
+                    <input type="hidden" id="pIcon">
+                    <small style="color: #8c92a0; display: block; margin-top: 5px;">Leave file blank to use URL or FontAwesome class.</small>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Title (English)</label>
+                        <input type="text" id="pTitleEn" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title (Thai)</label>
+                        <input type="text" id="pTitleTh" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Short Description (English)</label>
+                        <input type="text" id="pDescEn" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Description (Thai)</label>
+                        <input type="text" id="pDescTh" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Details (English) - Optional</label>
+                        <textarea id="pFullEn" rows="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif; resize: vertical;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Details (Thai) - Optional</label>
+                        <textarea id="pFullTh" rows="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif; resize: vertical;"></textarea>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="btn-secondary-pill" style="flex: 1; justify-content: center;" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary-pill" style="flex: 1; justify-content: center;">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script src="admin.js"></script>
+    <script src="footer.js"></script>
+</body>
+</html>

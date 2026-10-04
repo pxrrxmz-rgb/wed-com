@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGear - Glassmorphism Login</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            color: #57606f;
+            font-weight: 600;
+            z-index: 100;
+            font-family: 'Mitr', sans-serif;
+        }
+        .lang-btn {
+            color: #a4b0be;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { color: #ffffff; }
+        .lang-btn.active { color: #c02020; }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <a href="index.html" style="position: absolute; top: 20px; left: 20px; color: #a4b0be; text-decoration: none; font-size: 0.9rem; z-index: 100; font-weight: 500; font-family: 'Mitr', sans-serif;"><i class="fas fa-arrow-left"></i> <span data-i18n="back_store">Back to Store</span></a>
+
+    <!-- Language Toggle -->
+    <div class="lang-switch">
+        <a href="#" class="lang-btn active" data-lang="en">EN</a>
+        <span>|</span>
+        <a href="#" class="lang-btn" data-lang="th">TH</a>
+    </div>
+
+    <!-- Background elements for Glassmorphism effect -->
+    <div class="bg-orb orb-red"></div>
+    <div class="bg-orb orb-gray"></div>
+
+    <div class="container" id="container">
+        <div class="flipper">
+            
+            <!-- Login Form -->
+            <div class="form-container sign-in-container">
+                <form action="#">
+                    <div class="logo">
+                        <i class="fas fa-microchip"></i> TECH<span>GEAR</span>
+                    </div>
+                    <h1 data-i18n="login_title">Welcome Back</h1>
+                    <p class="subtitle" data-i18n="login_subtitle">Login to upgrade your rig</p>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" data-i18n-placeholder="ph_username" placeholder="Username" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" data-i18n-placeholder="ph_password" placeholder="Password" />
+                    </div>
+                    
+                    <div class="options">
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            <span data-i18n="remember_me">Remember me</span>
+                        </label>
+                        <a href="#" class="forgot" data-i18n="forgot_pass">Forgot password?</a>
+                    </div>
+                    
+                    <button type="button" data-i18n="btn_signin">SIGN IN</button>
+                    
+                    <div class="divider">
+                        <span data-i18n="login_or">OR</span>
+                    </div>
+                    <button type="button" class="btn-google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+                        <span data-i18n="btn_google">Sign in with Google</span>
+                    </button>
+                    
+                    <div class="bottom-text">
+                        <span data-i18n="new_builder">New builder?</span> <a href="#" id="signUp" data-i18n="create_acc">Create account</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="form-container sign-up-container">
+                <form action="#">
+                    <div class="logo">
+                        <i class="fas fa-microchip"></i> TECH<span>GEAR</span>
+                    </div>
+                    <h1 data-i18n="signup_title">Join the Elite</h1>
+                    <p class="subtitle" data-i18n="signup_subtitle">Register to get the best hardware deals</p>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" data-i18n-placeholder="ph_fullname" placeholder="Full name" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" data-i18n-placeholder="ph_email" placeholder="Email" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" data-i18n-placeholder="ph_password" placeholder="Password" />
+                    </div>
+                    
+                    <button type="button" data-i18n="btn_create">CREATE ACCOUNT</button>
+                    
+                    <div class="divider">
+                        <span data-i18n="login_or">OR</span>
+                    </div>
+                    <button type="button" class="btn-google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+                        <span data-i18n="btn_google">Sign in with Google</span>
+                    </button>
+                    
+                    <div class="bottom-text">
+                        <span data-i18n="already_have">Already have an account?</span> <a href="#" id="signIn" data-i18n="link_login">Login</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+    
+</body>
+</html>

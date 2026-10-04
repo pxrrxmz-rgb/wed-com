@@ -1,0 +1,19 @@
+{
+  "name": "techgear-store",
+  "version": "1.0.0",
+  "description": "TechGear - Full Stack Web Store",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.4"
+  }
+}
