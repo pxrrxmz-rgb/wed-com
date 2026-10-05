@@ -34,7 +34,7 @@ signUpBtn.addEventListener('click', async (e) => {
         const res = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: email, password: password })
+            body: JSON.stringify({ username: email, name: name, password: password })
         });
         
         const data = await res.json();
@@ -82,8 +82,11 @@ signInActionBtn.addEventListener('click', async (e) => {
             // Map API user object to match existing frontend format
             const userObj = {
                 username: data.username,
-                name: data.username,
-                email: data.username,
+                name: data.name || data.username,
+                email: data.email || data.username,
+                phone: data.phone || '',
+                address: data.address || '',
+                avatar: data.avatar || null,
                 cart: data.cart || []
             };
             
@@ -118,9 +121,11 @@ googleBtns.forEach(btn => {
         setTimeout(() => {
             const googleUser = {
                 id: Date.now(),
+                username: "user@gmail.com",
                 name: "Google User",
                 email: "user@gmail.com",
                 avatar: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+                cart: []
             };
             localStorage.setItem('currentUser', JSON.stringify(googleUser));
             window.location.href = 'index.html';

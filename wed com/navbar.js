@@ -46,7 +46,7 @@ const sharedNavbarHTML = `
         <div class="cart-footer">
             <div class="cart-total">
                 <span data-i18n="cart_total">Total:</span>
-                <span id="cartTotalPrice">$0.00</span>
+                <span id="cartTotalPrice">฿0.00</span>
             </div>
             <button id="checkoutBtn" class="btn-primary-pill" style="width: 100%; justify-content: center; margin-top: 15px;" data-i18n="cart_checkout">Checkout</button>
         </div>
@@ -130,17 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.onmouseover = () => item.style.background = 'rgba(255,255,255,0.1)';
                 item.onmouseout = () => item.style.background = 'transparent';
                 item.onclick = () => {
-                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    if (!currentUser) {
-                        const lang = localStorage.getItem('preferredLanguage') || 'en';
-                        if (typeof showToast === 'function') {
-                            showToast(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.', true);
-                        } else {
-                            alert(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.');
-                        }
-                        setTimeout(() => window.location.href = 'login.html', 1500);
-                        return;
-                    }
                     window.location.href = 'product.html?id=' + p.id;
                 };
 

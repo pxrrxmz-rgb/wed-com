@@ -101,27 +101,26 @@
                 <!-- Injected via JS -->
             </tbody>
         </table>
-    </div>
 
-    
-    <!-- Orders Management -->
-    <div class="admin-header" style="margin-top:40px;">
-        <h2>Order Management</h2>
+        <!-- Orders Management -->
+        <div class="admin-header" style="margin-top:40px;">
+            <h2>Order Management</h2>
+        </div>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="adminOrderList">
+                <!-- Injected via JS -->
+            </tbody>
+        </table>
     </div>
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="adminOrderList">
-            <!-- Injected via JS -->
-        </tbody>
-    </table>
 
 <!-- Product Modal -->
     <div class="modal" id="productModal">
@@ -140,7 +139,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Price ($)</label>
+                        <label>Price (฿)</label>
                         <input type="number" step="0.01" id="pPrice" required>
                     </div>
                 </div>

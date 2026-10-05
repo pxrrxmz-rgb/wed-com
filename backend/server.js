@@ -1,4 +1,12 @@
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+
+// Ensure .env is loaded from backend/.env or root
+const envPath = fs.existsSync(path.join(__dirname, '.env'))
+    ? path.join(__dirname, '.env')
+    : path.join(__dirname, '../.env');
+require('dotenv').config({ path: envPath });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,18 +20,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const path = require('path');
 // Serve static frontend files
 // Serve frontend - works both locally and on Railway
 const frontendPath = path.join(__dirname, '../wed com');
 const frontendPathAlt = path.join(__dirname, '../frontend');
-const fs = require('fs');
 const staticPath = fs.existsSync(frontendPath) ? frontendPath : frontendPathAlt;
 app.use(express.static(staticPath));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI).then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+if (process.env.MONGO_URI) {
+    mongoose.connect(process.env.MONGO_URI).then(() => console.log('Connected to MongoDB'))
+      .catch(err => console.error('MongoDB connection error:', err));
+} else {
+    console.error('MONGO_URI is not set in environment or .env file!');
+}
 
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;
@@ -126,7 +136,7 @@ app.get('/api/orders/user/:username', async (req, res) => {
 // --- User API ---
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, name } = req.body;
         
         const existingUser = await User.findOne({ username });
         if (existingUser) {
@@ -138,12 +148,14 @@ app.post('/api/register', async (req, res) => {
 
         const newUser = new User({
             username,
+            name: name || username,
+            email: username,
             password: hashedPassword,
             cart: []
         });
 
         await newUser.save();
-        res.json({ message: 'User registered successfully', username });
+        res.json({ message: 'User registered successfully', username, name: newUser.name });
     } catch (err) {
         res.status(500).json({ error: 'Registration failed' });
     }
@@ -163,9 +175,53 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ error: 'Invalid username or password' });
         }
 
-        res.json({ message: 'Login successful', username: user.username, cart: user.cart });
+        res.json({
+            message: 'Login successful',
+            username: user.username,
+            name: user.name || user.username,
+            email: user.email || user.username,
+            phone: user.phone || '',
+            address: user.address || '',
+            avatar: user.avatar || null,
+            cart: user.cart || []
+        });
     } catch (err) {
         res.status(500).json({ error: 'Login failed' });
+    }
+});
+
+// Update Profile
+app.put('/api/user/:username', async (req, res) => {
+    try {
+        const { name, phone, address, avatar, password } = req.body;
+        const updateData = {};
+        if (name !== undefined) updateData.name = name;
+        if (phone !== undefined) updateData.phone = phone;
+        if (address !== undefined) updateData.address = address;
+        if (avatar !== undefined) updateData.avatar = avatar;
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            updateData.password = await bcrypt.hash(password, salt);
+        }
+
+        const updated = await User.findOneAndUpdate(
+            { username: req.params.username },
+            { $set: updateData },
+            { new: true, upsert: true }
+        );
+        res.json({
+            message: 'Profile updated successfully',
+            user: {
+                username: updated.username,
+                name: updated.name,
+                email: updated.email || updated.username,
+                phone: updated.phone || '',
+                address: updated.address || '',
+                avatar: updated.avatar || null
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update profile' });
     }
 });
 

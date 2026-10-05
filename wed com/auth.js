@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 userIcon = `<img src="${currentUser.avatar}" style="width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid #ffffff;">`;
             }
 
-            profileLink.innerHTML = `${userIcon} <span>${getMsg('greeting')} ${currentUser.name.split(' ')[0]}</span>`;
+            const displayName = (currentUser.name || currentUser.username || 'User').split(' ')[0];
+            profileLink.innerHTML = `${userIcon} <span>${getMsg('greeting')} ${displayName}</span>`;
             
             // Add Logout button
             const logoutBtn = document.createElement('a');

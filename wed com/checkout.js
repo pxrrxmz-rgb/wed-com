@@ -56,7 +56,7 @@ function bindCheckout() {
         overlay.style.fontFamily = "'Mitr', sans-serif";
 
         
-    const lang = localStorage.getItem('language') || 'en';
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
     const textSecureCheckout = lang === 'th' ? 'การชำระเงินที่ปลอดภัย' : 'Secure Checkout';
     const textOrderSummary = lang === 'th' ? 'สรุปคำสั่งซื้อ' : 'Order Summary';
     const textTotal = lang === 'th' ? 'ยอดรวมทั้งหมด' : 'Total';
@@ -80,7 +80,7 @@ function bindCheckout() {
                 <div style="background:rgba(0,0,0,0.2); padding:20px; border-radius:12px; margin-bottom:20px;">
                     <div style="display:flex; justify-content:space-between; color:white; font-size:1.2rem; font-weight:bold; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.1);">
                         <span>${textTotal}</span>
-                        <span style="color:#c02020;">${total.toFixed(2)}</span>
+                        <span style="color:#c02020;">฿${total.toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -221,7 +221,7 @@ function bindCheckout() {
                     }, 3000);
 
                     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    const username = currentUser && currentUser.username ? currentUser.username : 'Guest';
+                    const username = currentUser ? (currentUser.username || currentUser.email || 'Guest') : 'Guest';
 
                     // Save order to MongoDB
                     const orderPayload = {

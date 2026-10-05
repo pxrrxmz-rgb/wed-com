@@ -4,16 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 2. Search Functionality ---
     const searchInput = document.getElementById('searchInput');
-    const productCards = document.querySelectorAll('.product-card');
     
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
+            const term = e.target.value.toLowerCase().trim();
+            const productCards = document.querySelectorAll('.product-card');
             
             productCards.forEach(card => {
-                const title = card.getAttribute('data-title').toLowerCase();
-                if (title.includes(term)) {
-                    card.style.display = 'block';
+                const title = (card.getAttribute('data-title') || '').toLowerCase();
+                if (!term || title.includes(term)) {
+                    card.style.display = '';
                 } else {
                     card.style.display = 'none';
                 }
@@ -182,134 +182,139 @@ document.addEventListener('DOMContentLoaded', () => {
     window.updateBadge();
 
     // --- 4. Category Slider ---
-    const slidesContainer = document.querySelector('.slides');
-    const dotsContainer = document.querySelector('.slider-dots');
-    
-    if (slidesContainer && dotsContainer) {
-        const sliderCategories = [
-            {
-                title_en: "PC Components",
-                title_th: "ชิ้นส่วนคอมพิวเตอร์",
-                desc_en: "Processors, Graphics Cards, RAM, and more to build your ultimate rig.",
-                desc_th: "ซีพียู การ์ดจอ แรม และอุปกรณ์ต่างๆ สำหรับประกอบคอมแรงของคุณ",
-                url: "components.html",
-                img: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=1200&q=80",
-                badge_en: "Build Your PC",
-                badge_th: "จัดสเปคคอม"
-            },
-            {
-                title_en: "Gaming Laptops",
-                title_th: "เกมมิ่งแล็ปท็อป",
-                desc_en: "High-performance notebooks for gaming and working on the go.",
-                desc_th: "โน้ตบุ๊กสเปคสูงเพื่อการเล่นเกมและการทำงานทุกที่ทุกเวลา",
-                url: "laptops.html",
-                img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=1200&q=80",
-                badge_en: "Portable Power",
-                badge_th: "ทรงพลังพกพาง่าย"
-            },
-            {
-                title_en: "Gaming Gear & Deals",
-                title_th: "อุปกรณ์เกมมิ่งเกียร์",
-                desc_en: "Monitors, Mechanical Keyboards, Mice and exclusive discounts.",
-                desc_th: "จอมอนิเตอร์ คีย์บอร์ด เมาส์ และโปรโมชั่นราคาสุดพิเศษ",
-                url: "deals.html",
-                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
-                badge_en: "Special Offers",
-                badge_th: "โปรโมชั่นพิเศษ"
-            }
-        ];
+    let slideInterval;
+    function initCategorySlider() {
+        const slidesContainer = document.querySelector('.slides');
+        const dotsContainer = document.querySelector('.slider-dots');
         
-        slidesContainer.innerHTML = '';
-        dotsContainer.innerHTML = '';
-        
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        if (slidesContainer && dotsContainer) {
+            const sliderCategories = [
+                {
+                    title_en: "PC Components",
+                    title_th: "ชิ้นส่วนคอมพิวเตอร์",
+                    desc_en: "Processors, Graphics Cards, RAM, and more to build your ultimate rig.",
+                    desc_th: "ซีพียู การ์ดจอ แรม และอุปกรณ์ต่างๆ สำหรับประกอบคอมแรงของคุณ",
+                    url: "components.html",
+                    img: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=1200&q=80",
+                    badge_en: "Build Your PC",
+                    badge_th: "จัดสเปคคอม"
+                },
+                {
+                    title_en: "Gaming Laptops",
+                    title_th: "เกมมิ่งแล็ปท็อป",
+                    desc_en: "High-performance notebooks for gaming and working on the go.",
+                    desc_th: "โน้ตบุ๊กสเปคสูงเพื่อการเล่นเกมและการทำงานทุกที่ทุกเวลา",
+                    url: "laptops.html",
+                    img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=1200&q=80",
+                    badge_en: "Portable Power",
+                    badge_th: "ทรงพลังพกพาง่าย"
+                },
+                {
+                    title_en: "Gaming Gear & Deals",
+                    title_th: "อุปกรณ์เกมมิ่งเกียร์",
+                    desc_en: "Monitors, Mechanical Keyboards, Mice and exclusive discounts.",
+                    desc_th: "จอมอนิเตอร์ คีย์บอร์ด เมาส์ และโปรโมชั่นราคาสุดพิเศษ",
+                    url: "deals.html",
+                    img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
+                    badge_en: "Special Offers",
+                    badge_th: "โปรโมชั่นพิเศษ"
+                }
+            ];
+            
+            slidesContainer.innerHTML = '';
+            dotsContainer.innerHTML = '';
+            
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
 
-        sliderCategories.forEach((cat, index) => {
-            const slide = document.createElement('div');
-            slide.className = 'slide' + (index === 0 ? ' active' : '');
-            slide.style.cursor = 'pointer';
-            slide.style.position = 'relative';
-            slide.style.background = '#000'; 
-            slide.onclick = () => window.location.href = cat.url;
-            
-            const title = lang === 'th' ? cat.title_th : cat.title_en;
-            const desc = lang === 'th' ? cat.desc_th : cat.desc_en;
-            const badge = lang === 'th' ? cat.badge_th : cat.badge_en;
-            
-            slide.innerHTML = `
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%); z-index: 1;"></div>
-                <img src="${cat.img}" alt="${title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+            sliderCategories.forEach((cat, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide' + (index === 0 ? ' active' : '');
+                slide.style.cursor = 'pointer';
+                slide.style.position = 'relative';
+                slide.style.background = '#000'; 
+                slide.onclick = () => window.location.href = cat.url;
                 
-                <div style="position: absolute; bottom: 50%; transform: translateY(50%); left: 60px; z-index: 2; padding: 25px 0; max-width: 500px; transition: 0.3s;" onmouseover="this.style.transform='translateY(50%) translateX(10px)'" onmouseout="this.style.transform='translateY(50%) translateX(0)'">
-                    <div style="display: inline-block; background: #c02020; color: white; padding: 6px 16px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(192,32,32,0.4);">${badge}</div>
-                    <h2 style="color: white; font-family: 'Mitr', sans-serif; margin-bottom: 15px; font-size: 2.8rem; line-height: 1.2; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">${title}</h2>
-                    <p style="color: #a4b0be; font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">${desc}</p>
-                    <div style="color: white; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
-                        <span style="border-bottom: 2px solid #c02020; padding-bottom: 2px;">${lang === 'th' ? 'ดูสินค้าทั้งหมด' : 'Shop Now'}</span>
-                        <i class="fas fa-arrow-right" style="color: #c02020;"></i>
+                const title = lang === 'th' ? cat.title_th : cat.title_en;
+                const desc = lang === 'th' ? cat.desc_th : cat.desc_en;
+                const badge = lang === 'th' ? cat.badge_th : cat.badge_en;
+                
+                slide.innerHTML = `
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%); z-index: 1;"></div>
+                    <img src="${cat.img}" alt="${title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                    
+                    <div style="position: absolute; bottom: 50%; transform: translateY(50%); left: 60px; z-index: 2; padding: 25px 0; max-width: 500px; transition: 0.3s;" onmouseover="this.style.transform='translateY(50%) translateX(10px)'" onmouseout="this.style.transform='translateY(50%) translateX(0)'">
+                        <div style="display: inline-block; background: #c02020; color: white; padding: 6px 16px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(192,32,32,0.4);">${badge}</div>
+                        <h2 style="color: white; font-family: 'Mitr', sans-serif; margin-bottom: 15px; font-size: 2.8rem; line-height: 1.2; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">${title}</h2>
+                        <p style="color: #a4b0be; font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">${desc}</p>
+                        <div style="color: white; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
+                            <span style="border-bottom: 2px solid #c02020; padding-bottom: 2px;">${lang === 'th' ? 'ดูสินค้าทั้งหมด' : 'Shop Now'}</span>
+                            <i class="fas fa-arrow-right" style="color: #c02020;"></i>
+                        </div>
                     </div>
-                </div>
-            `;
-            slidesContainer.appendChild(slide);
-            
-            const dot = document.createElement('span');
-            dot.className = 'dot' + (index === 0 ? ' active' : '');
-            dot.setAttribute('data-index', index);
-            dotsContainer.appendChild(dot);
-        });
-        
-        // Re-bind slider controls
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        const prevBtn = document.querySelector('.prev-btn');
-        const nextBtn = document.querySelector('.next-btn');
-        let currentIndex = 0;
-        let slideInterval;
-
-        function updateSlider() {
-            slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-            dots.forEach(dot => dot.classList.remove('active'));
-            if(dots[currentIndex]) dots[currentIndex].classList.add('active');
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % slides.length;
-            updateSlider();
-        }
-
-        function prevSlide() {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            updateSlider();
-        }
-
-        if(nextBtn) {
-            const newNext = nextBtn.cloneNode(true);
-            nextBtn.parentNode.replaceChild(newNext, nextBtn);
-            newNext.addEventListener('click', () => { nextSlide(); resetInterval(); });
-        }
-        if(prevBtn) {
-            const newPrev = prevBtn.cloneNode(true);
-            prevBtn.parentNode.replaceChild(newPrev, prevBtn);
-            newPrev.addEventListener('click', () => { prevSlide(); resetInterval(); });
-        }
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                updateSlider();
-                resetInterval();
+                `;
+                slidesContainer.appendChild(slide);
+                
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (index === 0 ? ' active' : '');
+                dot.setAttribute('data-index', index);
+                dotsContainer.appendChild(dot);
             });
-        });
+            
+            // Re-bind slider controls
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentIndex = 0;
 
-        function startInterval() {
-            slideInterval = setInterval(nextSlide, 6000);
-        }
-        function resetInterval() {
-            clearInterval(slideInterval);
+            function updateSlider() {
+                slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                if(dots[currentIndex]) dots[currentIndex].classList.add('active');
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateSlider();
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateSlider();
+            }
+
+            if(nextBtn) {
+                const newNext = nextBtn.cloneNode(true);
+                nextBtn.parentNode.replaceChild(newNext, nextBtn);
+                newNext.addEventListener('click', () => { nextSlide(); resetInterval(); });
+            }
+            if(prevBtn) {
+                const newPrev = prevBtn.cloneNode(true);
+                prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+                newPrev.addEventListener('click', () => { prevSlide(); resetInterval(); });
+            }
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateSlider();
+                    resetInterval();
+                });
+            });
+
+            if (slideInterval) clearInterval(slideInterval);
+            function startInterval() {
+                slideInterval = setInterval(nextSlide, 6000);
+            }
+            function resetInterval() {
+                clearInterval(slideInterval);
+                startInterval();
+            }
             startInterval();
         }
-        startInterval();
     }
+    initCategorySlider();
+    window.addEventListener('languageChanged', initCategorySlider);
 
     // --- 5. Entry Popup ---
     const entryPopupOverlay = document.getElementById('entryPopupOverlay');

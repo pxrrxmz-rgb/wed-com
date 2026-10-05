@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${iconHtml}</td>
                 <td><strong>${p.title_en}</strong><br><small style="color:#8c92a0;">${p.title_th}</small></td>
                 <td><span style="background:rgba(255,255,255,0.1); padding: 4px 10px; border-radius:10px; font-size:0.8rem; text-transform:uppercase;">${p.category}</span></td>
-                <td>$${p.price.toFixed(2)}</td>
+                <td>฿${p.price.toFixed(2)}</td>
                 <td>
                     <button class="action-btn edit" data-id="${p.id}" title="Edit"><i class="fas fa-edit"></i></button>
                     <button class="action-btn delete" data-id="${p.id}" title="Delete"><i class="fas fa-trash"></i></button>
@@ -195,7 +195,7 @@ function renderOrders() {
                 tr.innerHTML =
                     '<td>' + order.id + '</td>' +
                     '<td>' + new Date(order.date).toLocaleString() + '</td>' +
-                    '<td>$' + (order.total || 0).toFixed(2) + '</td>' +
+                    '<td>฿' + (order.total || 0).toFixed(2) + '</td>' +
                     '<td>' + order.status + '</td>' +
                     '<td>' + (order.status !== "Confirmed" ? '<button class="action-btn confirm" data-id="' + order.id + '">Confirm</button>' : '') + '</td>';
                 tbody.appendChild(tr);
@@ -217,7 +217,7 @@ function renderOrders() {
                 tr.innerHTML =
                     '<td>' + order.id + '</td>' +
                     '<td>' + new Date(order.date).toLocaleString() + '</td>' +
-                    '<td>$' + (order.total || 0).toFixed(2) + '</td>' +
+                    '<td>฿' + (order.total || 0).toFixed(2) + '</td>' +
                     '<td>' + order.status + '</td>' +
                     '<td>' + (order.status !== "Confirmed" ? '<button class="action-btn confirm" data-id="' + order.id + '">Confirm</button>' : '') + '</td>';
                 tbody.appendChild(tr);

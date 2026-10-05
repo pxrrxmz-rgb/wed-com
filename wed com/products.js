@@ -136,32 +136,10 @@ function renderProductGrid(containerId, categoryFilter = 'all') {
 }
 
 function openProductDetail(id) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
-        if (typeof showToast === 'function') {
-            showToast(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.', true);
-        } else {
-            alert(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.');
-        }
-        setTimeout(() => window.location.href = 'login.html', 1500);
-        return;
-    }
     window.location.href = 'product.html?id=' + id;
 }
 
 function renderSingleProductPage(id) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
-        if (typeof showToast === 'function') {
-            showToast(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.', true);
-        } else {
-            alert(lang === 'th' ? 'กรุณาเข้าสู่ระบบก่อนทำรายการ' : 'Please login first.');
-        }
-        setTimeout(() => window.location.href = 'login.html', 1500);
-        return;
-    }
     const products = getProducts();
     const p = products.find(x => x.id === id);
     const container = document.getElementById('productContainer');
@@ -239,8 +217,7 @@ function renderSingleProductPage(id) {
             document.body.appendChild(modalDiv);
             
             window.openProductEditModal = function() {
-                const products = JSON.parse(localStorage.getItem('site_products'));
-                const prod = products.find(x => x.id === '${id}');
+                const prod = getProducts().find(x => x.id === '${id}');
                 if(prod) {
                     document.getElementById('edit_icon').value = prod.icon || '';
                     document.getElementById('edit_title_en').value = prod.title_en || '';
@@ -256,18 +233,24 @@ function renderSingleProductPage(id) {
                 document.getElementById('adminInlineEditModal').firstElementChild.style.display = 'none';
             };
             
-            window.saveProductEdit = function(prodId) {
-                const products = JSON.parse(localStorage.getItem('site_products'));
-                const index = products.findIndex(x => x.id === prodId);
-                if(index !== -1) {
-                    products[index].icon = document.getElementById('edit_icon').value;
-                    products[index].title_en = document.getElementById('edit_title_en').value;
-                    products[index].title_th = document.getElementById('edit_title_th').value;
-                    products[index].price = parseFloat(document.getElementById('edit_price').value);
-                    products[index].desc_en = document.getElementById('edit_desc_en').value;
-                    products[index].full_en = document.getElementById('edit_full_en').value;
-                    localStorage.setItem('site_products', JSON.stringify(products));
+            window.saveProductEdit = async function(prodId) {
+                const updatedData = {
+                    icon: document.getElementById('edit_icon').value,
+                    title_en: document.getElementById('edit_title_en').value,
+                    title_th: document.getElementById('edit_title_th').value,
+                    price: parseFloat(document.getElementById('edit_price').value),
+                    desc_en: document.getElementById('edit_desc_en').value,
+                    full_en: document.getElementById('edit_full_en').value
+                };
+                try {
+                    await fetch('/api/products/' + prodId, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedData)
+                    });
                     window.location.reload();
+                } catch (err) {
+                    alert('Failed to save to database');
                 }
             };
         }
@@ -481,7 +464,6 @@ function renderSingleProductPage(id) {
         <div class="w-left">
             <div class="w-image-container">\n                ${adminImageEditHtml}
                 ${mediaContent}
-                <div class="w-pill">+2 more images</div>
             </div>
             
             <div class="w-desc">
@@ -496,7 +478,7 @@ function renderSingleProductPage(id) {
             </div>
             
             <h1 class="w-title">${title}</h1>
-            <div class="w-subtitle">Exclusive 60% Keycaps</div>
+            <div class="w-subtitle">${(p.category || 'Hardware').toUpperCase()}</div>
             
             <div class="w-price">${priceDisplay}</div>
             
