@@ -108,27 +108,3 @@ signInActionBtn.addEventListener('click', async (e) => {
     }
 });
 
-// --- Google Login Simulation ---
-const googleBtns = document.querySelectorAll('.btn-google');
-googleBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        const btnText = btn.querySelector('span');
-        btnText.textContent = "Connecting to Google...";
-        btn.style.opacity = "0.7";
-        
-        setTimeout(() => {
-            const googleUser = {
-                id: Date.now(),
-                username: "user@gmail.com",
-                name: "Google User",
-                email: "user@gmail.com",
-                avatar: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
-                cart: []
-            };
-            localStorage.setItem('currentUser', JSON.stringify(googleUser));
-            window.location.href = 'index.html';
-        }, 1500);
-    });
-});

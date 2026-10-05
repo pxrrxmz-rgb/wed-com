@@ -58,7 +58,7 @@ body {
 .container {
     position: relative;
     width: 420px; /* 4 เหลี่ยม */
-    height: 620px;
+    height: 530px;
     perspective: 1500px;
     z-index: 10;
 }
@@ -266,45 +266,3 @@ h1 {
     text-decoration: underline;
 }
 
-/* Google Login Styles */
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 20px 0;
-    color: #8c92a0;
-    font-size: 0.85rem;
-}
-.divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.divider span {
-    padding: 0 10px;
-}
-
-.btn-google {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: 0.3s;
-    font-family: 'Mitr', sans-serif;
-}
-.btn-google:hover {
-    background: rgba(255,255,255,0.1);
-}
-.btn-google img {
-    width: 20px;
-    height: 20px;
-}
