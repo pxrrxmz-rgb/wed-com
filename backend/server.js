@@ -25,6 +25,12 @@ app.use(express.static(staticPath));
 mongoose.connect(process.env.MONGO_URI).then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+app.get('/api/health', (req, res) => {
+    const dbState = mongoose.connection.readyState;
+    const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+    res.json({ status: 'ok', db: states[dbState] || dbState, env: !!process.env.MONGO_URI });
+});
+
 // --- PRODUCTS API ---
 app.get('/api/products', async (req, res) => {
     try {
