@@ -57,16 +57,17 @@
                     
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" data-i18n-placeholder="ph_username" placeholder="Username" />
+                        <input type="text" id="loginUsername" data-i18n-placeholder="ph_username_email" placeholder="Username / Email" />
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" style="position: relative;">
                         <i class="fas fa-lock"></i>
-                        <input type="password" data-i18n-placeholder="ph_password" placeholder="Password" />
+                        <input type="password" id="loginPassword" data-i18n-placeholder="ph_password" placeholder="Password" style="padding-right: 42px;" />
+                        <i class="fas fa-eye toggle-password" title="Show/Hide Password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8c92a0; transition: color 0.3s; z-index: 5;"></i>
                     </div>
                     
                     <div class="options">
                         <label class="remember-me">
-                            <input type="checkbox">
+                            <input type="checkbox" id="rememberMe">
                             <span data-i18n="remember_me">Remember me</span>
                         </label>
                         <a href="#" class="forgot" data-i18n="forgot_pass">Forgot password?</a>
@@ -97,9 +98,10 @@
                         <i class="fas fa-envelope"></i>
                         <input type="email" data-i18n-placeholder="ph_email" placeholder="Email" />
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" style="position: relative;">
                         <i class="fas fa-lock"></i>
-                        <input type="password" data-i18n-placeholder="ph_password" placeholder="Password" />
+                        <input type="password" id="signupPassword" data-i18n-placeholder="ph_password" placeholder="Password" style="padding-right: 42px;" />
+                        <i class="fas fa-eye toggle-password" title="Show/Hide Password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8c92a0; transition: color 0.3s; z-index: 5;"></i>
                     </div>
                     
                     <button type="button" data-i18n="btn_create">CREATE ACCOUNT</button>

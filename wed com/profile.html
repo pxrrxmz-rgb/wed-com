@@ -369,8 +369,27 @@
             window.location.href = 'login.html';
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             if (!currentUser) return;
+
+            // Fetch freshest profile from MongoDB to ensure avatar is loaded
+            const uName = currentUser.username || currentUser.email;
+            if (uName) {
+                try {
+                    const res = await fetch('/api/user/' + encodeURIComponent(uName));
+                    if (res.ok) {
+                        const fresh = await res.json();
+                        if (fresh.name) currentUser.name = fresh.name;
+                        if (fresh.email) currentUser.email = fresh.email;
+                        if (fresh.phone) currentUser.phone = fresh.phone;
+                        if (fresh.address) currentUser.address = fresh.address;
+                        if (fresh.avatar) currentUser.avatar = fresh.avatar;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch user from DB', e);
+                }
+            }
 
             // Show name & email
             document.getElementById('displayName').textContent = currentUser.name || currentUser.username;
@@ -385,18 +404,44 @@
             // Avatar
             if (currentUser.avatar) {
                 const ring = document.getElementById('avatarRing');
-                ring.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
+                ring.innerHTML = `<img src="${currentUser.avatar}" alt="avatar" style="width:100%;height:100%;object-fit:cover;">`;
             }
 
-            // Avatar upload
+            // Avatar upload with canvas optimization
             document.getElementById('avatarInput').addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
+
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                    const ring = document.getElementById('avatarRing');
-                    ring.innerHTML = `<img src="${ev.target.result}" alt="avatar">`;
-                    currentUser.avatar = ev.target.result;
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const maxDim = 320;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > h) {
+                            if (w > maxDim) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            }
+                        } else {
+                            if (h > maxDim) {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                        const ring = document.getElementById('avatarRing');
+                        ring.innerHTML = `<img src="${optimizedDataUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;">`;
+                        currentUser.avatar = optimizedDataUrl;
+                    };
+                    img.src = ev.target.result;
                 };
                 reader.readAsDataURL(file);
             });
@@ -416,28 +461,35 @@
             currentUser.address = address || currentUser.address;
             if (password) currentUser.password = password;
 
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            document.getElementById('displayName').textContent = currentUser.name || currentUser.username;
-
             // Sync to MongoDB backend
             const uName = currentUser.username || currentUser.email;
             if (uName) {
                 try {
-                    await fetch('/api/user/' + encodeURIComponent(uName), {
+                    const res = await fetch('/api/user/' + encodeURIComponent(uName), {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             name: currentUser.name,
+                            email: currentUser.email,
                             phone: currentUser.phone,
                             address: currentUser.address,
                             avatar: currentUser.avatar,
                             password: password || undefined
                         })
                     });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.user && data.user.avatar) {
+                            currentUser.avatar = data.user.avatar;
+                        }
+                    }
                 } catch (e) {
                     console.error('Failed to sync profile with server', e);
                 }
             }
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            document.getElementById('displayName').textContent = currentUser.name || currentUser.username;
 
             // Show success toast
             if (typeof showToast === 'function') showToast(getMsg('msg_prof_saved'), false);

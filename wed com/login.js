@@ -71,14 +71,49 @@ signUpBtn.addEventListener('click', async (e) => {
 // Handle Login
 const signInForm = document.querySelector('.sign-in-container form');
 const signInActionBtn = signInForm.querySelector('button');
+const rememberCheckbox = document.getElementById('rememberMe');
+const loginUsernameInput = document.getElementById('loginUsername');
+const loginPasswordInput = document.getElementById('loginPassword');
+
+// Auto-fill remembered credentials if available
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('techgear_remembered');
+    if (saved) {
+        try {
+            const creds = JSON.parse(saved);
+            if (creds.username && loginUsernameInput) loginUsernameInput.value = creds.username;
+            if (creds.password && loginPasswordInput) loginPasswordInput.value = creds.password;
+            if (rememberCheckbox) rememberCheckbox.checked = true;
+        } catch (e) {}
+    }
+});
+
+// Password Visibility Toggle
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const input = icon.parentElement.querySelector('input');
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+            icon.style.color = '#c02020';
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+            icon.style.color = '#8c92a0';
+        }
+    });
+});
 
 signInActionBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     const inputs = signInForm.querySelectorAll('input:not([type="checkbox"])');
-    const email = inputs[0].value.trim();
+    const emailOrUser = inputs[0].value.trim();
     const password = inputs[1].value.trim();
 
-    if (!email || !password) {
+    if (!emailOrUser || !password) {
         showToast(getMsg('msg_fill_all'), true);
         return;
     }
@@ -87,13 +122,23 @@ signInActionBtn.addEventListener('click', async (e) => {
         const res = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: email, password: password })
+            body: JSON.stringify({ username: emailOrUser, password: password })
         });
         
         const data = await res.json();
         
         if (res.ok) {
             showToast(getMsg('msg_login_success') || 'Login successful!');
+            
+            // Handle Remember Me
+            if (rememberCheckbox && rememberCheckbox.checked) {
+                localStorage.setItem('techgear_remembered', JSON.stringify({
+                    username: emailOrUser,
+                    password: password
+                }));
+            } else {
+                localStorage.removeItem('techgear_remembered');
+            }
             
             // Map API user object to match existing frontend format
             const userObj = {
