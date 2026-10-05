@@ -162,6 +162,19 @@ h1 {
     transition: 0.3s;
 }
 
+.input-group i.toggle-password {
+    left: auto !important;
+    right: 15px !important;
+    width: auto !important;
+    cursor: pointer;
+    color: #8c92a0;
+    z-index: 10;
+}
+
+.input-group i.toggle-password:hover {
+    color: #ffffff;
+}
+
 .input-group input {
     width: 100%;
     padding: 12px 15px 12px 42px;
