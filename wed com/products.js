@@ -2,7 +2,7 @@ let site_products = [];
 
 async function fetchProductsFromAPI() {
     try {
-        const res = await fetch('http://localhost:3000/api/products');
+        const res = await fetch('/api/products');
         if (res.ok) {
             site_products = await res.json();
         } else {
