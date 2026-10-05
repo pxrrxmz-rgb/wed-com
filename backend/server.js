@@ -155,7 +155,16 @@ app.post('/api/register', async (req, res) => {
         });
 
         await newUser.save();
-        res.json({ message: 'User registered successfully', username, name: newUser.name });
+        res.json({
+            message: 'User registered successfully',
+            username: newUser.username,
+            name: newUser.name || newUser.username,
+            email: newUser.email || newUser.username,
+            phone: newUser.phone || '',
+            address: newUser.address || '',
+            avatar: newUser.avatar || null,
+            cart: newUser.cart || []
+        });
     } catch (err) {
         res.status(500).json({ error: 'Registration failed' });
     }

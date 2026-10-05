@@ -40,9 +40,25 @@ signUpBtn.addEventListener('click', async (e) => {
         const data = await res.json();
         
         if (res.ok) {
-            inputs.forEach(input => input.value = '');
-            showToast(getMsg('msg_signup_success') || 'Signup success!');
-            container.classList.remove("right-panel-active");
+            showToast(getMsg('msg_signup_success') || 'Account created! Logging in...');
+            
+            // Auto login immediately
+            const userObj = {
+                username: data.username || email,
+                name: data.name || name || email,
+                email: data.email || email,
+                phone: data.phone || '',
+                address: data.address || '',
+                avatar: data.avatar || null,
+                cart: data.cart || []
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userObj));
+            localStorage.setItem('cart', JSON.stringify(data.cart || []));
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
         } else {
             showToast(data.error || getMsg('msg_email_exist'), true);
         }
