@@ -10,50 +10,136 @@
         .admin-container {
             max-width: 1200px;
             margin: 100px auto 50px;
-            padding: 30px;
+            padding: 35px;
+            border-radius: 20px;
         }
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
+        .admin-header h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* --- Admin Tab Bar --- */
+        .admin-tab-bar {
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 30px;
+            width: fit-content;
+        }
+        .admin-tab-btn {
+            padding: 10px 24px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: #a4b0be;
+            font-size: 0.95rem;
+            font-family: 'Mitr', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-tab-btn:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.05);
+        }
+        .admin-tab-btn.active {
+            background: #c02020;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(192,32,32,0.4);
+        }
+
+        /* Table */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
             color: #fff;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .admin-table th, .admin-table td {
-            padding: 15px;
+            padding: 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .admin-table th { background: rgba(0,0,0,0.3); }
+        .admin-table th {
+            background: rgba(0,0,0,0.4);
+            color: #a4b0be;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .admin-table tbody tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
         .action-btn {
             background: none; border: none; cursor: pointer; color: #a4b0be; font-size: 1.1rem; margin-right: 10px; transition: 0.3s;
         }
         .action-btn:hover { color: #fff; }
         .action-btn.edit:hover { color: #2ecc71; }
         .action-btn.delete:hover { color: #e74c3c; }
-        
+
+        .status-badge {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-processing { background: rgba(241,196,15,0.15); color: #f1c40f; border: 1px solid rgba(241,196,15,0.3); }
+        .status-confirmed { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+
+        .action-btn.confirm {
+            background: #27ae60;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Mitr', sans-serif;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .action-btn.confirm:hover {
+            background: #2ecc71;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46,204,113,0.4);
+        }
+
         /* Modal */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000;
             justify-content: center; align-items: center;
         }
         .modal.active { display: flex; }
         .modal-content {
             background: #18191c; border: 1px solid rgba(255,255,255,0.1);
-            padding: 30px; border-radius: 15px; width: 500px; max-width: 90%;
+            padding: 35px; border-radius: 18px; width: 550px; max-width: 90%;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: #a4b0be; font-size: 0.9rem; }
+        .form-group label { display: block; margin-bottom: 6px; color: #a4b0be; font-size: 0.85rem; font-weight: 500; }
         .form-group input, .form-group select {
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+            width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
             background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif;
         }
         .form-row { display: flex; gap: 15px; }
@@ -65,124 +151,146 @@
     <div class="bg-orb orb-red"></div>
     <div class="bg-orb orb-gray"></div>
 
+    <script src="lang.js"></script>
     <script src="navbar.js"></script>
 
     <!-- Admin Login -->
     <div class="container" id="adminLoginContainer" style="display: flex; justify-content: center; align-items: center; height: 80vh;">
-        <div class="form-container glass-card" style="width: 400px; padding: 40px; text-align: center;">
-            <i class="fas fa-lock" style="font-size: 3rem; color: #c02020; margin-bottom: 20px;"></i>
-            <h2 style="margin-bottom: 10px; color: #fff;">Admin Authentication</h2>
-            <p style="color: #a4b0be; margin-bottom: 30px; font-size: 0.9rem;">Enter passcode to access dashboard</p>
+        <div class="form-container glass-card" style="width: 420px; padding: 40px; text-align: center; position: relative;">
+            <div class="lang-switch" style="position: absolute; top: 18px; right: 20px; display: flex; gap: 8px; align-items: center; color: #57606f; font-family: 'Mitr', sans-serif;">
+                <a href="#" class="lang-btn active" data-lang="en">EN</a>
+                <span>|</span>
+                <a href="#" class="lang-btn" data-lang="th">TH</a>
+            </div>
+            <i class="fas fa-lock" style="font-size: 3rem; color: #c02020; margin-bottom: 20px; margin-top: 10px;"></i>
+            <h2 data-i18n="admin_auth_title" style="margin-bottom: 10px; color: #fff;">Admin Authentication</h2>
+            <p data-i18n="admin_auth_desc" style="color: #a4b0be; margin-bottom: 30px; font-size: 0.9rem;">Enter passcode to access dashboard</p>
             <form id="adminLoginForm">
-                <input type="password" id="adminPass" placeholder="Admin Passcode" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; text-align: center; font-size: 1.1rem; outline: none;">
-                <button type="submit" class="btn-primary-pill" style="width: 100%; justify-content: center;">Enter Dashboard</button>
+                <input type="password" id="adminPass" data-i18n-placeholder="admin_auth_ph" placeholder="Admin Passcode" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; text-align: center; font-size: 1.1rem; outline: none;">
+                <button type="submit" class="btn-primary-pill" style="width: 100%; justify-content: center;" data-i18n="admin_auth_btn">Enter Dashboard</button>
             </form>
         </div>
     </div>
 
     <!-- Main Dashboard (Initially Hidden) -->
     <div class="admin-container glass-card" id="adminDashboard" style="display: none;">
-        <div class="admin-header">
-            <h2>Product Management</h2>
-            <button class="btn-primary-pill" id="addBtn"><i class="fas fa-plus"></i> Add Product</button>
+        
+        <!-- Admin Tab Switcher -->
+        <div class="admin-tab-bar">
+            <button type="button" class="admin-tab-btn active" id="tabBtnProducts" onclick="switchAdminTab('products')">
+                <i class="fas fa-boxes"></i> <span data-i18n="admin_tab_products">Product Management</span>
+            </button>
+            <button type="button" class="admin-tab-btn" id="tabBtnOrders" onclick="switchAdminTab('orders')">
+                <i class="fas fa-receipt"></i> <span data-i18n="admin_tab_orders">Order Management</span>
+            </button>
         </div>
 
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Icon</th>
-                    <th>Title (EN)</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="adminProductList">
-                <!-- Injected via JS -->
-            </tbody>
-        </table>
+        <!-- Section 1: Product Management -->
+        <div id="sectionProducts" class="admin-section">
+            <div class="admin-header">
+                <h2 data-i18n="admin_tab_products">Product Management</h2>
+                <button class="btn-primary-pill" id="addBtn"><i class="fas fa-plus"></i> <span data-i18n="admin_add_product">Add Product</span></button>
+            </div>
 
-        <!-- Orders Management -->
-        <div class="admin-header" style="margin-top:40px;">
-            <h2>Order Management</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="th_icon">Icon</th>
+                        <th data-i18n="th_title">Product Name</th>
+                        <th data-i18n="th_category">Category</th>
+                        <th data-i18n="th_price">Price</th>
+                        <th data-i18n="th_actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductList">
+                    <!-- Injected via JS -->
+                </tbody>
+            </table>
         </div>
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="adminOrderList">
-                <!-- Injected via JS -->
-            </tbody>
-        </table>
+
+        <!-- Section 2: Orders Management -->
+        <div id="sectionOrders" class="admin-section" style="display: none;">
+            <div class="admin-header">
+                <h2 data-i18n="admin_tab_orders">Order Management</h2>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="th_order_id">ID</th>
+                        <th data-i18n="th_date">Date</th>
+                        <th data-i18n="th_total">Total</th>
+                        <th data-i18n="th_status">Status</th>
+                        <th data-i18n="th_actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminOrderList">
+                    <!-- Injected via JS -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-<!-- Product Modal -->
+    <!-- Product Modal -->
     <div class="modal" id="productModal">
         <div class="modal-content">
-            <h3 id="modalTitle" style="margin-bottom: 20px;">Add Product</h3>
+            <h3 id="modalTitle" style="margin-bottom: 20px;" data-i18n="modal_add_title">Add Product</h3>
             <form id="productForm">
                 <input type="hidden" id="pId">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Category</label>
+                        <label data-i18n="lbl_category">Category</label>
                         <select id="pCat" required>
-                            <option value="components">Components</option>
-                              <option value="laptops">Laptops</option>
-                            <option value="prebuilds">Pre-builds</option>
-                            <option value="deals">Deals</option>
+                            <option value="components" data-i18n="cat_components">Components</option>
+                            <option value="laptops" data-i18n="cat_laptops">Laptops</option>
+                            <option value="prebuilds" data-i18n="cat_prebuilds">Pre-builds</option>
+                            <option value="deals" data-i18n="cat_deals">Deals</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Price (฿)</label>
+                        <label data-i18n="lbl_price">Price (฿)</label>
                         <input type="number" step="0.01" id="pPrice" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Product Image (URL or Upload)</label>
+                    <label data-i18n="lbl_image">Product Image (URL or Upload)</label>
                     <input type="text" id="pImage" placeholder="https://example.com/image.png or fas fa-box" style="margin-bottom: 10px;">
                     <input type="file" id="pImageFile" accept="image/*" style="font-size: 0.9rem; color: #a4b0be;">
                     <input type="hidden" id="pIcon">
-                    <small style="color: #8c92a0; display: block; margin-top: 5px;">Leave file blank to use URL or FontAwesome class.</small>
+                    <small data-i18n="lbl_image_hint" style="color: #8c92a0; display: block; margin-top: 5px;">Leave file blank to use URL or FontAwesome class.</small>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Title (English)</label>
+                        <label data-i18n="lbl_title_en">Title (English)</label>
                         <input type="text" id="pTitleEn" required>
                     </div>
                     <div class="form-group">
-                        <label>Title (Thai)</label>
+                        <label data-i18n="lbl_title_th">Title (Thai)</label>
                         <input type="text" id="pTitleTh" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Short Description (English)</label>
+                        <label data-i18n="lbl_desc_en">Short Description (English)</label>
                         <input type="text" id="pDescEn" required>
                     </div>
                     <div class="form-group">
-                        <label>Short Description (Thai)</label>
+                        <label data-i18n="lbl_desc_th">Short Description (Thai)</label>
                         <input type="text" id="pDescTh" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Full Details (English) - Optional</label>
+                        <label data-i18n="lbl_full_en">Full Details (English) - Optional</label>
                         <textarea id="pFullEn" rows="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif; resize: vertical;"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Full Details (Thai) - Optional</label>
+                        <label data-i18n="lbl_full_th">Full Details (Thai) - Optional</label>
                         <textarea id="pFullTh" rows="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-family: 'Mitr', sans-serif; resize: vertical;"></textarea>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn-secondary-pill" style="flex: 1; justify-content: center;" id="cancelBtn">Cancel</button>
-                    <button type="submit" class="btn-primary-pill" style="flex: 1; justify-content: center;">Save Product</button>
+                    <button type="button" class="btn-secondary-pill" style="flex: 1; justify-content: center;" id="cancelBtn" data-i18n="btn_cancel">Cancel</button>
+                    <button type="submit" class="btn-primary-pill" style="flex: 1; justify-content: center;" data-i18n="btn_save_prod">Save Product</button>
                 </div>
             </form>
         </div>

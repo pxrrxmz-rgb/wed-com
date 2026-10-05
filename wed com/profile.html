@@ -230,12 +230,12 @@
     <!-- Top Nav -->
     <div class="top-nav">
         <a href="index.html" style="color:#a4b0be; text-decoration:none; font-size:0.9rem;">
-            <i class="fas fa-arrow-left"></i> Back to Store
+            <i class="fas fa-arrow-left"></i> <span data-i18n="back_store">Back to Store</span>
         </a>
-        <div style="display:flex; gap:8px; align-items:center; color:#57606f;">
-            <a href="#" class="lang-btn active" data-lang="en" style="color:#c02020; text-decoration:none; font-family:'Mitr',sans-serif;">EN</a>
+        <div class="lang-switch" style="display:flex; gap:8px; align-items:center; color:#57606f;">
+            <a href="#" class="lang-btn active" data-lang="en">EN</a>
             <span>|</span>
-            <a href="#" class="lang-btn" data-lang="th" style="color:#a4b0be; text-decoration:none; font-family:'Mitr',sans-serif;">TH</a>
+            <a href="#" class="lang-btn" data-lang="th">TH</a>
         </div>
     </div>
 
@@ -264,6 +264,7 @@
                         </div>
                     </label>
                     <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                    <label for="avatarInput" class="avatar-label" data-i18n="prof_pic" style="font-size:0.8rem; color:#a4b0be; cursor:pointer; background:rgba(255,255,255,0.05); padding:4px 14px; border-radius:14px; border:1px solid rgba(255,255,255,0.1); margin-bottom:8px; transition:0.3s; font-family:'Mitr',sans-serif;">Change Picture</label>
                     <div class="avatar-name" id="displayName">Loading...</div>
                     <div class="avatar-email" id="displayEmail"></div>
                 </div>
@@ -287,7 +288,7 @@
                     </div>
                     <div class="form-group full">
                         <label><i class="fas fa-lock" style="margin-right:5px; color:#c02020;"></i><span data-i18n="prof_password">New Password</span></label>
-                        <input type="password" id="profPassword" data-i18n-placeholder="ph_password" placeholder="Leave blank to keep current">
+                        <input type="password" id="profPassword" data-i18n-placeholder="ph_password_keep" placeholder="Leave blank to keep current">
                     </div>
                 </div>
 
@@ -307,7 +308,7 @@
             <div id="orderList">
                 <div class="empty-orders">
                     <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading orders...</p>
+                    <p data-i18n="orders_loading">Loading orders...</p>
                 </div>
             </div>
         </div>
@@ -404,8 +405,8 @@
             }
 
             // Show success toast
-            if (typeof showToast === 'function') showToast('Profile saved!', false);
-            else alert('Profile saved!');
+            if (typeof showToast === 'function') showToast(getMsg('msg_prof_saved'), false);
+            else alert(getMsg('msg_prof_saved'));
         }
 
         // Load order history
@@ -414,7 +415,7 @@
             if (!currentUser) return;
 
             const username = currentUser.username || currentUser.email;
-            container.innerHTML = `<div class="empty-orders"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>`;
+            container.innerHTML = `<div class="empty-orders"><i class="fas fa-spinner fa-spin"></i><p>${getMsg('orders_loading')}</p></div>`;
 
             try {
                 const res = await fetch('/api/orders/user/' + encodeURIComponent(username));
@@ -424,36 +425,37 @@
                     container.innerHTML = `
                         <div class="empty-orders">
                             <i class="fas fa-box-open"></i>
-                            <p>No orders yet!</p>
-                            <a href="index.html"><i class="fas fa-shopping-cart" style="margin-right:6px;"></i>Shop Now</a>
+                            <p>${getMsg('orders_empty')}</p>
+                            <a href="index.html"><i class="fas fa-shopping-cart" style="margin-right:6px;"></i>${getMsg('orders_shop_now')}</a>
                         </div>`;
                     document.getElementById('orderCount').textContent = '';
                     return;
                 }
 
-                document.getElementById('orderCount').textContent = `(${orders.length} orders)`;
+                document.getElementById('orderCount').textContent = `(${orders.length} ${getMsg('orders_count_suffix')})`;
                 const lang = localStorage.getItem('preferredLanguage') || 'en';
 
                 container.innerHTML = orders.map(order => {
                     const statusClass = order.status === 'Confirmed' ? 'status-confirmed' : 'status-processing';
-                    const statusText = order.status === 'Confirmed'
-                        ? (lang === 'th' ? 'ยืนยันแล้ว' : 'Confirmed')
-                        : (lang === 'th' ? 'กำลังดำเนินการ' : 'Processing');
+                    const statusText = order.status === 'Confirmed' ? getMsg('status_confirmed') : getMsg('status_processing');
 
                     const itemsHtml = Array.isArray(order.items) && order.items.length > 0
-                        ? order.items.map(item => `
+                        ? order.items.map(item => {
+                            const title = (lang === 'th' && (item.title_th || item.title)) ? (item.title_th || item.title) : (item.title_en || item.title || 'Product');
+                            return `
                             <div class="order-item">
-                                <span class="item-name">${item.title_en || item.title || 'Product'}<span class="item-qty">x${item.qty || 1}</span></span>
+                                <span class="item-name">${title}<span class="item-qty">x${item.qty || 1}</span></span>
                                 <span class="item-price">฿${((item.price || 0) * (item.qty || 1)).toFixed(2)}</span>
-                            </div>`).join('')
-                        : `<div class="order-item"><span class="item-name" style="color:#57606f;">No item details</span></div>`;
+                            </div>`;
+                        }).join('')
+                        : `<div class="order-item"><span class="item-name" style="color:#57606f;">${getMsg('item_no_details')}</span></div>`;
 
                     return `
                         <div class="order-card">
                             <div class="order-header">
                                 <div>
                                     <div class="order-id"><i class="fas fa-hashtag" style="color:#c02020; margin-right:4px; font-size:0.8rem;"></i>${order.id}</div>
-                                    <div class="order-date"><i class="fas fa-clock" style="margin-right:5px;"></i>${new Date(order.date).toLocaleString()}</div>
+                                    <div class="order-date"><i class="fas fa-clock" style="margin-right:5px;"></i>${new Date(order.date).toLocaleString(lang === 'th' ? 'th-TH' : 'en-US')}</div>
                                 </div>
                                 <span class="status-badge ${statusClass}">${statusText}</span>
                             </div>
@@ -467,9 +469,17 @@
 
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<div class="empty-orders"><i class="fas fa-exclamation-circle" style="color:#c02020;"></i><p>Could not load orders. Try again later.</p></div>`;
+                container.innerHTML = `<div class="empty-orders"><i class="fas fa-exclamation-circle" style="color:#c02020;"></i><p>${getMsg('orders_err')}</p></div>`;
             }
         }
+
+        // Re-render orders if language changes
+        window.addEventListener('languageChanged', () => {
+            const ordersPanel = document.getElementById('panel-orders');
+            if (ordersPanel && ordersPanel.classList.contains('active')) {
+                loadOrders();
+            }
+        });
     </script>
     <script src="footer.js"></script>
 </body>
