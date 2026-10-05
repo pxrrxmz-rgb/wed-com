@@ -32,6 +32,41 @@
             z-index: 1000;
         }
 
+        /* --- Navbar Style Language Switcher --- */
+        .lang-switch {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            color: #57606f;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Mitr', sans-serif;
+            user-select: none;
+        }
+        .lang-switch span {
+            color: #57606f;
+            font-weight: 400;
+        }
+        .lang-btn {
+            color: #8c92a0 !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Mitr', sans-serif;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .lang-btn:hover {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        .lang-btn.active {
+            color: #c02020 !important;
+            font-weight: 700;
+            text-decoration: none !important;
+        }
+
         /* --- Tab Switcher --- */
         .tab-bar {
             display: flex;
@@ -232,7 +267,7 @@
         <a href="index.html" style="color:#a4b0be; text-decoration:none; font-size:0.9rem;">
             <i class="fas fa-arrow-left"></i> <span data-i18n="back_store">Back to Store</span>
         </a>
-        <div class="lang-switch" style="display:flex; gap:8px; align-items:center; color:#57606f;">
+        <div class="lang-switch">
             <a href="#" class="lang-btn active" data-lang="en">EN</a>
             <span>|</span>
             <a href="#" class="lang-btn" data-lang="th">TH</a>

@@ -61,6 +61,41 @@
             box-shadow: 0 4px 15px rgba(192,32,32,0.4);
         }
 
+        /* Language Switcher (Navbar Style) */
+        .lang-switch {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            color: #57606f;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Mitr', sans-serif;
+            user-select: none;
+        }
+        .lang-switch span {
+            color: #57606f;
+            font-weight: 400;
+        }
+        .lang-btn {
+            color: #8c92a0 !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Mitr', sans-serif;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .lang-btn:hover {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        .lang-btn.active {
+            color: #c02020 !important;
+            font-weight: 700;
+            text-decoration: none !important;
+        }
+
         /* Table */
         .admin-table {
             width: 100%;
