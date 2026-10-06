@@ -4,7 +4,9 @@
   "description": "TechGear - Full Stack Web Store",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "export-db": "node backend/export_database.js",
+    "import-db": "node database/import_database.js"
   },
   "keywords": [],
   "author": "",
