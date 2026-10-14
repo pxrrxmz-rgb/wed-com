@@ -61,8 +61,11 @@
 │   └── README.md                  # คู่มือรายละเอียดฐานข้อมูล
 ├── wed com/                       # โค้ดฝั่งหน้าเว็บ (Frontend UI)
 │   ├── index.html                 # หน้าแรกของเว็บไซต์
-│   ├── shop.html                  # หน้าร้านค้า / หมวดหมู่สินค้า
-│   ├── checkout.html              # หน้าชำระเงิน
+│   ├── laptops.html               # หมวดหมู่โน้ตบุ๊ก (Laptops)
+│   ├── components.html            # หมวดหมู่ชิ้นส่วนคอมพิวเตอร์ (Components)
+│   ├── prebuilds.html             # หมวดหมู่คอมประกอบ (Prebuilds)
+│   ├── deals.html                 # หมวดหมู่ดีลและโปรโมชั่น (Deals)
+│   ├── product.html               # หน้ารายละเอียดสินค้า
 │   ├── login.html                 # หน้าเข้าสู่ระบบและสมัครสมาชิก
 │   ├── profile.html               # หน้าโปรไฟล์และแก้ไขข้อมูลส่วนตัว
 │   ├── admin.html                 # แดชบอร์ดผู้ดูแลระบบ
